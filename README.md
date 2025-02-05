@@ -35,7 +35,7 @@ The project is organized into three main modules:
 
 1. **Clone the Repository**
    
-   git clone https://github.com/your-username/your-repository.git
+   git clone https://github.com/sodbilegtb/AWS_IaC_Terraform.git
    cd your-repository
 
 2. **Initialize Terraform**
