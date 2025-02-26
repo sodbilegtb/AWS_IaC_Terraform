@@ -9,5 +9,5 @@ output "ec2_public_ips" {
 
 output "rds_endpoint" {
   description = "Endpoint of the RDS instance"
-  value       = module.rds.rds_endpoint # Outputs RDS database endpoint
+  value       = length(module.rds) > 0 ? module.rds[0].rds_endpoint : "RDS not created"
 }

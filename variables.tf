@@ -71,6 +71,13 @@ variable "db_password" {
   sensitive   = true # Marks this variable as sensitive
 }
 
+variable "create_rds" {
+  description = "Flag to create RDS (true/false)"
+  type        = bool
+  default     = true
+}
+
+
 variable "bucket_name" {
   description = "Name of the S3 bucket for static website"
   type        = string
