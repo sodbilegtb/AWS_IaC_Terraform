@@ -18,7 +18,7 @@ resource "aws_s3_bucket_website_configuration" "static_website" {
 resource "aws_s3_bucket_public_access_block" "static_website" {
   bucket                  = aws_s3_bucket.static_website.id
   block_public_acls       = false
-  block_public_policy     = false # Allow public policies
+  block_public_policy     = false  # Allow public policies
   ignore_public_acls      = false
   restrict_public_buckets = false
 }
