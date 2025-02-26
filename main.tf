@@ -42,6 +42,7 @@ module "compute" {
 # RDS module: Creates PostgreSQL database
 
 module "rds" {
+    count              = var.create_rds ? 1 : 0
   source            = "./modules/rds"
   db_instance_class = var.db_instance_class
   db_name           = var.db_name

@@ -47,8 +47,9 @@ jobs:
       - name: Terraform Plan
         run: terraform plan
 
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+      - name: Terraform Apply (Skip RDS)
+        run: terraform apply -var="create_rds=false" -auto-approve
+
 
       - name: Delete Network Interfaces (before destroy)
         run: |

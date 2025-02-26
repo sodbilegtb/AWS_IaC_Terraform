@@ -1,4 +1,4 @@
 output "rds_endpoint" {
-  description = "Endpoint of the RDS instance"
+  description = "RDS instance endpoint"
   value       = aws_db_instance.default.endpoint
 }
