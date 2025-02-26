@@ -50,3 +50,10 @@ module "rds" {
   subnet_ids        = module.networking.private_subnet_ids # Pass the list of private subnet IDs
   security_group_id = module.networking.security_group_id
 }
+
+module "static_website" {
+  source      = "./modules/s3"
+  bucket_name = var.bucket_name
+  common_tags = local.common_tags
+  environment = local.common_tags["Environment"]
+}
