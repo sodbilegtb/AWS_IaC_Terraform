@@ -1,6 +1,10 @@
-.terraform
-/shelf/
-/workspace.xml
-/httpRequests/
-/dataSources/
-/dataSources.local.xml
+# Ignore system files
+.DS_Store
+.Trash/
+.vscode/
+.idea/
+node_modules/
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
+.aws/
