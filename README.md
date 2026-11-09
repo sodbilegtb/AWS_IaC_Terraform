@@ -1,10 +1,10 @@
-# 🚀 Automated AWS Infrastructure with Terraform
+#  Automated AWS Infrastructure with Terraform
 
 This project demonstrates how to provision and manage a cloud infrastructure on **AWS** using **Terraform**. It includes the setup of a VPC, subnets, EC2 instances, RDS, S3 static website hosting, and a CI/CD pipeline with GitHub Actions—all managed as code.
 
 ---
 
-## 📌 Features
+##  Features
 - **Infrastructure as Code (IaC)** with Terraform
 - Automated provisioning of **VPC, Subnets, EC2, RDS and S3**
 - **Static Website Hosting** using **AWS S3**
@@ -15,7 +15,7 @@ This project demonstrates how to provision and manage a cloud infrastructure on 
 
 ---
 
-## 🏗 Architecture
+##  Architecture
 The project is organized into three main modules:
 
 1. **Networking** – Creates the VPC, subnets, internet gateway, and routing
@@ -29,7 +29,7 @@ The project is organized into three main modules:
 
 ## ⚡ Quick Start
 
-### 🔹 Prerequisites
+###  Prerequisites
 - **AWS CLI** installed and configured
 - **Terraform** installed (version 1.3+ recommended)
 - An **AWS account** (Free Tier usage is recommended)
@@ -64,7 +64,7 @@ The project is organized into three main modules:
 
 ---
 
-## 🚀 S3 Static Website Hosting
+##  S3 Static Website Hosting
 -Terraform creates an S3 bucket configured for static website hosting.
 -Public access settings & bucket policy allow the website to be accessible via an S3 endpoint.
 
@@ -72,7 +72,7 @@ After running Terraform, your static site will be accessible via the S3 website 
 
 ---
 
-## 🔄 CI/CD with GitHub Actions
+##  CI/CD with GitHub Actions
 - A **GitHub Actions workflow** automates Terraform deployment.
 - Every push to `main` triggers the CI/CD pipeline.
 - The pipeline **validates**, **plans**, **applies Terraform changes**, and then **destroys the infrastructure** automatically.
@@ -90,7 +90,7 @@ After running Terraform, your static site will be accessible via the S3 website 
 
 ---
 
-## 🛠 Future Enhancements
+##  Future Enhancements
 
 - Add Auto-Scaling & Load Balancers for high availability.
 - Integrate a CI/CD pipeline using GitHub Actions for automated deployments.
@@ -98,7 +98,7 @@ After running Terraform, your static site will be accessible via the S3 website 
 
 ---
 
-## 📢 Conclusion
+##  Conclusion
 Terraform simplifies and streamlines the process of managing AWS infrastructure—one code file, one complete infrastructure!
 With the addition of S3 static website hosting and GitHub Actions CI/CD, deployments are now fully automated and scalable.
 Remember to always run **terraform destroy** after tests to avoid consuming your Free Tier too quickly.
