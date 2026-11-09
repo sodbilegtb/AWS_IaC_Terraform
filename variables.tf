@@ -50,7 +50,7 @@ variable "instance_type" {
 variable "db_instance_class" {
   description = "Instance class for the RDS instance"
   type        = string
-  default     = "db.t2.micro" # Free Tier eligible
+  default     = "db.t3.micro" # Free Tier eligible
 }
 
 variable "db_name" {

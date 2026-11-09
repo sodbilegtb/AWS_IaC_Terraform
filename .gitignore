@@ -1,10 +1,19 @@
-# Ignore system files
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+
+# Lokale Variablen — können Zugangsdaten enthalten, daher nie committen
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+
+# Systemdateien
 .DS_Store
 .Trash/
 .vscode/
 .idea/
 node_modules/
-terraform.tfstate
-terraform.tfstate.backup
-.terraform/
 .aws/

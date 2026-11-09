@@ -1,105 +1,93 @@
-#  Automated AWS Infrastructure with Terraform
+# Automated AWS Infrastructure with Terraform
 
-This project demonstrates how to provision and manage a cloud infrastructure on **AWS** using **Terraform**. It includes the setup of a VPC, subnets, EC2 instances, RDS, S3 static website hosting, and a CI/CD pipeline with GitHub Actions—all managed as code.
+Provisions a complete AWS environment as code: a VPC with public and private
+subnets, an EC2 web server, an RDS database and an S3 bucket serving a static
+website — deployed through a GitHub Actions pipeline.
 
----
+This is a learning project built to practise Infrastructure as Code end to end.
+It runs as a temporary test environment: the pipeline tears the infrastructure
+down again after every deployment so nothing is left running in the account.
 
-##  Features
-- **Infrastructure as Code (IaC)** with Terraform
-- Automated provisioning of **VPC, Subnets, EC2, RDS and S3**
-- **Static Website Hosting** using **AWS S3**
-- **CI/CD Pipeline** with **GitHub Actions** for automated deployments
-- Modular design for enhanced reusability and clarity
-- Secure configuration with Security Groups
-- Terraform Outputs for easy access to resource information
+## Architecture
 
----
+The configuration is split into four modules:
 
-##  Architecture
-The project is organized into three main modules:
+| Module | Purpose |
+| --- | --- |
+| `modules/networking` | VPC, public and private subnets, internet gateway, route tables |
+| `modules/compute` | EC2 instance and security groups for the web server |
+| `modules/rds` | RDS instance in a private subnet |
+| `modules/s3` | S3 bucket configured for static website hosting |
 
-1. **Networking** – Creates the VPC, subnets, internet gateway, and routing
-2. **Compute** – Launches EC2 instances for the web server
-3. **Database** – Sets up an RDS instance in a private subnet
-4. **Storage & Hosting** – Configures **S3** for static website hosting 
+`main.tf` wires the modules together, `variables.tf` declares the inputs and
+`outputs.tf` exposes the endpoints. `graph.png` and `terraform-graph.png` show
+the resource dependency graph.
 
-> **Note:** Instead of manually clicking through the AWS console, Terraform lets you define your entire infrastructure in code—quick, repeatable, and efficient!
+## Prerequisites
 
----
+- AWS CLI, configured with credentials
+- Terraform 1.7 or later
+- An AWS account (Free Tier is sufficient)
 
-## ⚡ Quick Start
+## Quick start
 
-###  Prerequisites
-- **AWS CLI** installed and configured
-- **Terraform** installed (version 1.3+ recommended)
-- An **AWS account** (Free Tier usage is recommended)
-- **GitHub Actions setup** (if using CI/CD)
+```bash
+git clone https://github.com/sodbilegtb/AWS_IaC_Terraform.git
+cd AWS_IaC_Terraform
 
-### 🛠 Setup Instructions
+# Variables: copy the example and fill in your own values
+cp terraform.tfvars.example terraform.tfvars
 
-1. **Clone the Repository**
-   
-   git clone https://github.com/sodbilegtb/AWS_IaC_Terraform.git
-   cd your-repository
+# The database password is never stored in a file
+export TF_VAR_db_password='your-password'
 
-2. **Initialize Terraform**
+terraform init
+terraform plan
+terraform apply
+terraform output
+```
 
-    terraform init
+Tear everything down again when you are done:
 
-3. **Review the Execution Plan**
+```bash
+terraform destroy
+```
 
-    terraform plan
+## Configuration
 
-4. **Apply Changes to Deploy Resources**
+`terraform.tfvars` is excluded via `.gitignore` and must not be committed —
+it holds account-specific values. Use `terraform.tfvars.example` as the
+template. `db_password` is declared `sensitive` and is passed through the
+`TF_VAR_db_password` environment variable rather than any file.
 
-    terraform apply -auto-approve
+## S3 static website hosting
 
-5. **Display Terraform Outputs**
+Terraform creates an S3 bucket with website hosting enabled and a bucket policy
+that makes the content in `src/` publicly readable. The website URL is part of
+the Terraform outputs.
 
-    terraform output
+## CI/CD with GitHub Actions
 
-6. **Clean Up Resources After Testing**
+The workflow lives in `.github/workflows/deploy.yml` and runs on every push to
+`main` and on pull requests:
 
-    terraform destroy -auto-approve
+1. TFLint
+2. `terraform init` and `terraform validate`
+3. `terraform plan`
+4. `terraform apply` — only on pushes to `main`
+5. `terraform destroy` — tears the test environment down again
 
----
+The following repository secrets are required:
 
-##  S3 Static Website Hosting
--Terraform creates an S3 bucket configured for static website hosting.
--Public access settings & bucket policy allow the website to be accessible via an S3 endpoint.
+| Secret | Purpose |
+| --- | --- |
+| `AWS_ACCESS_KEY_ID` | AWS credentials for the pipeline |
+| `AWS_SECRET_ACCESS_KEY` | AWS credentials for the pipeline |
+| `TF_VAR_DB_PASSWORD` | Password for the RDS instance |
+| `TF_VAR_BUCKET_NAME` | Globally unique name for the S3 bucket |
 
-After running Terraform, your static site will be accessible via the S3 website URL provided in the outputs.
+## Possible next steps
 
----
-
-##  CI/CD with GitHub Actions
-- A **GitHub Actions workflow** automates Terraform deployment.
-- Every push to `main` triggers the CI/CD pipeline.
-- The pipeline **validates**, **plans**, **applies Terraform changes**, and then **destroys the infrastructure** automatically.
-
-### **Workflow Process**
-1. **Terraform Lint & Format Check**
-2. **Terraform Plan** (preview changes)
-3. **Terraform Apply** (deploy changes to AWS)
-4. **Terraform Destroy** (clean up resources after deployment)
-
-> **Why does it destroy itself?**  
-> This setup is useful for **temporary test environments**, ensuring that AWS resources are not left running unnecessarily. If you want a persistent infrastructure, you can modify the workflow to remove the `terraform destroy` step.
-
-> **Location of GitHub Actions workflow file:** `.github/workflows/terraform.yml`
-
----
-
-##  Future Enhancements
-
-- Add Auto-Scaling & Load Balancers for high availability.
-- Integrate a CI/CD pipeline using GitHub Actions for automated deployments.
-- Implement enhanced security measures, such as IAM roles and private endpoints.
-
----
-
-##  Conclusion
-Terraform simplifies and streamlines the process of managing AWS infrastructure—one code file, one complete infrastructure!
-With the addition of S3 static website hosting and GitHub Actions CI/CD, deployments are now fully automated and scalable.
-Remember to always run **terraform destroy** after tests to avoid consuming your Free Tier too quickly.
-
+- Auto Scaling group and Application Load Balancer for high availability
+- Dedicated IAM roles instead of static access keys (OIDC)
+- Remote state in S3 with DynamoDB state locking
